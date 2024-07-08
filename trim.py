@@ -30,12 +30,13 @@ for card in data:
                 new_card[f'img_uri_small{suffix}'] = None
                 new_card[f'img_uri_normal{suffix}'] = None
     else:
+        suffix = '_front'
         for field in desired_fields:
-            new_card[field] = card.get(field, None)
+            new_card[f'{field}{suffix}'] = card.get(field, None)
 
         if 'image_uris' in card:
-            new_card['img_uri_small'] = card['image_uris'].get('small')
-            new_card['img_uri_normal'] = card['image_uris'].get('normal')
+            new_card[f'img_uri_small{suffix}'] = card['image_uris'].get('small')
+            new_card[f'img_uri_normal{suffix}'] = card['image_uris'].get('normal')
         else:
             new_card['img_uri_small'] = None
             new_card['img_uri_normal'] = None
