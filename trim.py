@@ -3,7 +3,7 @@ import json
 
 with open('./source/default-cards-20240702090634.json','r', encoding='utf-8') as file:
     data = json.load(file)
-
+# Open original JSON file, and set which fields that will be pulled from the file"
 desired_fields = ['name', 'mana_cost', 'cmc', 'type_line', 'oracle_text']
 processed_data = []
 processed_ids = set()
@@ -16,7 +16,7 @@ for card in data:
     processed_ids.add(card_id)
     new_card = {}
 
-
+# Applies to cards that have 2 faces. Front and back faces for a single card.
     if 'card_faces' in card:
         for i, face in enumerate(card['card_faces']):
             suffix = '_front' if i == 0 else '_back'
