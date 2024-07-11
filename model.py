@@ -23,7 +23,7 @@ class Card(db.Model):
 
     card_id = db.Column(db.Integer, autoincrement = True, primary_key = True, unique = True)
     name_front = db.Column(db.String, nullable = False)
-    cmc_front = db.Column(db.Integer, nullable = False)
+    cmc_front = db.Column(db.Integer, nullable = True)
     type_line_front = db.Column(db.String, nullable = False)
     oracle_text_front = db.Column(db.Text, nullable = False)
     img_uri_small_front = db.Column(db.Text, nullable = False)

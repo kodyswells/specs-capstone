@@ -44,4 +44,4 @@ for card in data:
     processed_data.append(new_card)
 
 with open('./source/MTG_Cards.json', 'w', encoding='utf-8') as output_file:
-    json.dump(processed_data, output_file, indent=4)
+    json.dump(processed_data, output_file, ensure_ascii=False, indent=4)
