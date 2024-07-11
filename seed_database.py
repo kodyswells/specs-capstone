@@ -1,6 +1,7 @@
 import os
 import json
 from model import User, Card, Deck, CardDeck, Library, connect_to_db
+from random import randint, choice
 from server import app
 import model
 
@@ -63,4 +64,11 @@ with app.app_context():
         cards_in_db.append(db_card)
     
     model.db.session.add_all(cards_in_db)
+
+    # for n in range(10):
+    #     email = f'user{n}@test.com'  # Voila! A unique email!
+    #     password = 'test'
+        
+    #     user = User.create(email, password)
+    #     model.db.session.add(user)    
     model.db.session.commit()

@@ -1,5 +1,6 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
+import scrypt
 
 db = SQLAlchemy()
 
@@ -7,15 +8,52 @@ class User(db.Model):
     """A User"""
     __tablename__ = "users"
 
-    user_id = db.Column(db.Integer, autoincrement = True, primary_key = True, unique = True)
-    email = db.Column(db.String, unique = True)
-    password = db.Column(db.String)
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True, unique=True)
+    email = db.Column(db.String, unique=True)
+    password_hash = db.Column(db.LargeBinary)
+    salt = db.Column(db.String(32))
 
     decks = db.relationship("Deck", backref="user", lazy=True)
     libraries = db.relationship("Library", backref="user", lazy=True)
 
     def __repr__(self):
-        return f"<User user_id = {self.user_id}, email = {self.email}, password = {self.password}>"
+        return f"<User user_id={self.user_id}, email={self.email}>"
+
+    @classmethod
+    def create(cls, email, password):
+        """Create and return a new user."""
+        # Generate a random salt
+        salt = os.urandom(16)
+       
+        # Hash the password with the generated salt
+        password_hash = scrypt.hash(password, salt)
+
+        # Convert the salt to a string to store in the database
+        salt_str = salt.hex()
+
+        return cls(email=email, password_hash=password_hash, salt=salt_str)
+
+    @staticmethod
+    def verify_password(stored_hash, stored_salt, password):
+        """Verify a stored password against one provided by user."""
+        # Convert the stored salt back to bytes
+        salt_bytes = bytes.fromhex(stored_salt)
+        # Hash the provided password with the stored salt
+        hashed_password = scrypt.hash(password, salt_bytes)
+        # Compare the stored hash with the newly hashed password
+        return stored_hash == hashed_password
+
+    @classmethod
+    def get_by_id(cls, user_id):
+        return cls.query.get(user_id)
+
+    @classmethod
+    def get_by_email(cls, email):
+        return cls.query.filter(User.email == email).first()
+
+    @classmethod
+    def all_users(cls):
+        return cls.query.all()
     
 class Card(db.Model):
     """A MTG Card"""
