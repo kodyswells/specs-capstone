@@ -22,13 +22,10 @@ class User(db.Model):
     @classmethod
     def create(cls, email, password):
         """Create and return a new user."""
-        # Generate a random salt
+
         salt = os.urandom(16)
        
-        # Hash the password with the generated salt
         password_hash = scrypt.hash(password, salt)
-
-        # Convert the salt to a string to store in the database
         salt_str = salt.hex()
 
         return cls(email=email, password_hash=password_hash, salt=salt_str)
@@ -36,11 +33,9 @@ class User(db.Model):
     @staticmethod
     def verify_password(stored_hash, stored_salt, password):
         """Verify a stored password against one provided by user."""
-        # Convert the stored salt back to bytes
+
         salt_bytes = bytes.fromhex(stored_salt)
-        # Hash the provided password with the stored salt
         hashed_password = scrypt.hash(password, salt_bytes)
-        # Compare the stored hash with the newly hashed password
         return stored_hash == hashed_password
 
     @classmethod
@@ -50,10 +45,6 @@ class User(db.Model):
     @classmethod
     def get_by_email(cls, email):
         return cls.query.filter(User.email == email).first()
-
-    @classmethod
-    def all_users(cls):
-        return cls.query.all()
     
 class Card(db.Model):
     """A MTG Card"""
@@ -79,17 +70,34 @@ class Card(db.Model):
     def __repr__(self):
         return f"<Card card_id = {self.card_id}, name_front = {self.name_front}, cmc_front = {self.cmc_front}, type_line_front = {self.type_line_front}, oracle_text_front = {self.oracle_text_front}, img_uri_small_front = {self.img_uri_small_front}, img_uri_normal_front = {self.img_uri_normal_front}, name_back = {self.name_back}, cmc_back = {self.cmc_back}, type_line_back = {self.type_line_back}, oracle_text_back = {self.oracle_text_back}, img_uri_small_back = {self.img_uri_small_back}, img_uri_normal_back = {self.img_uri_normal_back}>"
     
+    @classmethod
+    def get_by_card_id(cls, card_id):
+        return cls.query.get(card_id) 
+
 class Deck(db.Model):
     """A users decks"""
     __tablename__ = "decks"
 
     deck_id = db.Column(db.Integer, autoincrement = True, primary_key = True, unique = True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    name = db.Column(db.String, nullable = False)
 
     card_decks = db.relationship("CardDeck", backref="deck", lazy=True)
 
     def __repr__(self):
         return f"<Deck deck_id = {self.deck_id}, user_id = {self.user_id}>"
+    
+    @classmethod
+    def create(cls, user_id, name):
+        return cls(user_id=user_id, name=name)
+    
+    @classmethod
+    def show_decks(cls, user_id):
+        return cls.query.filter(Deck.user_id == user_id)
+    
+    @classmethod
+    def get_by_name(cls, name):
+        return cls.query.filter_by(name=name).first()
     
 class CardDeck(db.Model):
     """Association table between Cards and Decks"""
@@ -101,6 +109,10 @@ class CardDeck(db.Model):
 
     def __repr__(self):
         return f"<CardDeck card_deck_id={self.card_deck_id}, card_id={self.card_id}, deck_id={self.deck_id}>"
+    
+    @classmethod
+    def add_card(cls, card_id, deck_id):
+        return cls(card_id=card_id, deck_id=deck_id)
     
 class Library(db.Model):
     """A Users' Library"""

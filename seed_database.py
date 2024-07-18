@@ -7,7 +7,7 @@ import model
 
 """Script to seed the database"""
 
-# Ensure the database is created with UTF-8 encoding
+
 os.system('dropdb MTG')
 os.system('createdb MTG --encoding=UTF8')
 
@@ -16,7 +16,7 @@ with app.app_context():
     model.db.create_all()
 
     """Load MTG card info from the JSON"""
-    with open('source/MTG_Cards.json', encoding='utf-8') as f:  # Ensure the file is read with UTF-8 encoding
+    with open('source/MTG_Cards.json', encoding='utf-8') as f:
         card_data = json.loads(f.read())
 
     cards_in_db = []
@@ -63,12 +63,5 @@ with app.app_context():
         )
         cards_in_db.append(db_card)
     
-    model.db.session.add_all(cards_in_db)
-
-    # for n in range(10):
-    #     email = f'user{n}@test.com'  # Voila! A unique email!
-    #     password = 'test'
-        
-    #     user = User.create(email, password)
-    #     model.db.session.add(user)    
+    model.db.session.add_all(cards_in_db)  
     model.db.session.commit()

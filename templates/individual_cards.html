@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} <title>{{ card.name_front }}</title>{% endblock %}
+
+{% block body %}
+    <h1>{{ card.name_front }}</h1>
+    <p>Mana Cost: {{ card.mana_cost_front }}</p>
+    <p>CMC: {{ card.cmc_front }}</p>
+    <p>Type: {{ card.type_line_front }}</p>
+    <p>Oracle Text: {{ card.oracle_text_front }}</p>
+    <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
+    {% if card.name_back %}
+        <h2>{{ card.name_back }}</h2>
+        <p>Mana Cost: {{ card.mana_cost_back }}</p>
+        <p>CMC: {{ card.cmc_back }}</p>
+        <p>Type: {{ card.type_line_back }}</p>
+        <p>Oracle Text: {{ card.oracle_text_back }}</p>
+        <img src="{{ card.img_uri_normal_back }}" alt="{{ card.name_back }}">
+    {% endif %}
+    <div class="content">
+        <h2>Add card to deck below</h2>
+        <form action="/library/{{ card.card_id }}/add_card" method="post">
+            <label for="name">Name of the deck you want to add the card to.</label>
+            <input type="text" name="name" id="name">
+            <input type="submit" value="Add Card">
+        </form>
+    </div>
+    
+{% endblock %}
