@@ -20,8 +20,12 @@
     <div class="content">
         <h2>Add card to deck below</h2>
         <form action="/library/{{ card.card_id }}/add_card" method="post">
-            <label for="name">Name of the deck you want to add the card to.</label>
-            <input type="text" name="name" id="name">
+            <label for="deck">Select the deck you want to add the card to:</label>
+            <select name="deck_id" id="deck">
+                {% for deck in decks %}
+                    <option value="{{ deck.deck_id }}">{{ deck.name }}</option>
+                {% endfor %}
+            </select>
             <input type="submit" value="Add Card">
         </form>
     </div>

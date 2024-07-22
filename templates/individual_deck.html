@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ deck.name }}{% endblock %}
+
+{% block body %}
+
+<div>
+    <h1>{{ deck.name }}</h1>
+
+    <div>
+        {% for card in cards %}
+        <a href="/library/{{ card.card_id }}">
+            <h1>{{card.name_front}}</h1>
+            <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<form action="/deck/remove_card" method="post">
+    <input type="hidden" name="deck_id" value="{{ deck.deck_id }}">
+    <label for="name">Enter the name of the card you want to remove</label>
+    <input type="text" name="name" id="name">
+    <label for="quantity">Enter the number of cards to remove</label>
+    <input type="number" name="quantity" id="quantity" min="1" value="1">
+    <input type="submit" value="Remove">
+</form>
+
+{% endblock %}

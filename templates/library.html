@@ -1,1 +1,12 @@
 {% extends 'base.html' %} 
+
+{% block title %}Library{% endblock %}
+
+{% block body %}
+    {% for card in cards %}
+    <a href="/library/{{ card.card_id }}">
+        <h1>{{ card.name_front }}</h1>
+        <img src="{{ card.img_uri_small_front }}" alt="{{ card.name_front }}">
+    </a>
+    {% endfor %}
+{% endblock %}

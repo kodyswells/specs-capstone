@@ -40,11 +40,11 @@ class User(db.Model):
 
     @classmethod
     def get_by_id(cls, user_id):
-        return cls.query.get(user_id)
+        return db.session.query(cls).get(user_id)
 
     @classmethod
     def get_by_email(cls, email):
-        return cls.query.filter(User.email == email).first()
+        return db.session.query(cls).filter(User.email == email).first()
     
 class Card(db.Model):
     """A MTG Card"""
@@ -72,7 +72,12 @@ class Card(db.Model):
     
     @classmethod
     def get_by_card_id(cls, card_id):
-        return cls.query.get(card_id) 
+        return db.session.get(cls, card_id)
+    
+    @classmethod
+    def get_by_name(cls, name):
+        print(f"Querying card with name: '{name}'")
+        return db.session.query(cls).filter(db.func.lower(cls.name_front) == db.func.lower(name.strip())).first()
 
 class Deck(db.Model):
     """A users decks"""
@@ -93,11 +98,15 @@ class Deck(db.Model):
     
     @classmethod
     def show_decks(cls, user_id):
-        return cls.query.filter(Deck.user_id == user_id)
+        return db.session.query(cls).filter(Deck.user_id == user_id)
+    
+    @classmethod
+    def get_deck_id(cls, deck_id):
+        return cls(deck_id = deck_id)
     
     @classmethod
     def get_by_name(cls, name):
-        return cls.query.filter_by(name=name).first()
+        return db.session.query(cls).filter_by(name=name).first()
     
 class CardDeck(db.Model):
     """Association table between Cards and Decks"""
@@ -113,6 +122,14 @@ class CardDeck(db.Model):
     @classmethod
     def add_card(cls, card_id, deck_id):
         return cls(card_id=card_id, deck_id=deck_id)
+    
+    @classmethod
+    def get_by_deck_id(cls, deck_id):
+        return db.session.query(cls).filter_by(deck_id = deck_id).all()
+    
+    @classmethod
+    def get_by_card_id(cls, card_id):
+        return cls(card_id=card_id)
     
 class Library(db.Model):
     """A Users' Library"""
