@@ -63,7 +63,7 @@ def show_card(card_id):
     user_id = session.get("user_id")
     if not user_id:
         flash("Please log in to add cards to your decks.")
-        return redirect("/login")
+        return redirect("/")
     
     decks = Deck.show_decks(user_id).all()
     
