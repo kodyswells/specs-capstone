@@ -1,12 +1,41 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
 {% block title %}Library{% endblock %}
 
 {% block body %}
+    <form action="/search" method="post">
+        <input type="search" name="search" id="search" value="{{ search }}"><button type="submit">Search</button>
+    </form>
+    <div>
+        <span>
+            <form action="/filter" method="post">
+                <p>Filter By Color</p>
+                <label><input type="checkbox" name="color" value="Red"> Red</label>
+                <label><input type="checkbox" name="color" value="Blue"> Blue</label>
+                <label><input type="checkbox" name="color" value="Black"> Black</label>
+                <label><input type="checkbox" name="color" value="White"> White</label>
+                <label><input type="checkbox" name="color" value="Green"> Green</label>
+                <label><input type="checkbox" name="color" value="Colorless"> Colorless</label>
+                <button type="submit">Apply</button>
+            </form>
+        </span>
+    </div>
     {% for card in cards %}
     <a href="/library/{{ card.card_id }}">
         <h1>{{ card.name_front }}</h1>
         <img src="{{ card.img_uri_small_front }}" alt="{{ card.name_front }}">
     </a>
     {% endfor %}
+    
+    <div class="pagination">
+        <a href="{{ url_for('search', page=1, search=search) }}">First</a>
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('search', page=pagination.prev_num, search=search) }}">Previous</a>
+        {% endif %}
+        <span>Page {{ pagination.page }} of {{ pagination.pages }}</span>
+        {% if pagination.has_next %}
+            <a href="{{ url_for('search', page=pagination.next_num, search=search) }}">Next</a>
+        {% endif %}
+        <a href="{{ url_for('search', page=pagination.pages, search=search) }}">Last</a>
+    </div>
 {% endblock %}

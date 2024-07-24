@@ -64,15 +64,66 @@ def show_card(card_id):
     if not user_id:
         flash("Please log in to add cards to your decks.")
         return redirect("/")
-    
     decks = Deck.show_decks(user_id).all()
     
     return render_template("individual_cards.html", card=card, decks=decks)
 
 @app.route("/library")
 def show_library():
-    cards = Card.query.all()
-    return render_template("library.html", cards=cards)
+    page = request.args.get('page', 1, type=int)
+    per_page = 100
+    pagination = Card.query.paginate(page=page, per_page=per_page, error_out=False)
+    cards = pagination.items
+    return render_template("library.html", cards=cards, pagination=pagination)
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "POST":
+        search = request.form.get("search")
+        page = 1
+    else:
+        search = request.args.get("search")
+        page = request.args.get('page', 1, type=int)
+
+    per_page = 50
+    if search:
+        search_cards = db.session.query(Card).filter(Card.name_front.ilike(f'%{search}%'))
+    else:
+        search_cards = db.session.query(Card)
+
+    pagination = search_cards.paginate(page=page, per_page=per_page, error_out=False)
+    cards = pagination.items
+    return render_template("library.html", cards=cards, pagination=pagination, search=search)
+
+@app.route("/filter", methods=["GET", "POST"])
+def filter_cards():
+    if request.method == "POST":
+        selected_colors = request.form.getlist("color")
+
+        filter_conditions = []
+        if selected_colors:
+            for color in selected_colors:
+                color_key = {
+                    "Green": "{G}",
+                    "Black": "{B}",
+                    "Blue": "{U}",
+                    "Red": "{R}",
+                    "White": "{W}",
+                    "Colorless": "{C}"
+                }.get(color, "")
+                if color_key:
+                    filter_conditions.append(Card.mana_cost_front.ilike(f"%{color_key}%"))
+    
+    if filter_conditions:
+        filtered_cards = db.session.query(Card).filter(db.or_(*filter_conditions))
+    else:
+        filtered_cards = db.session.query(Card)
+
+    page = request.args.get('page', 1, type=int)
+    per_page = 50
+    pagination = filtered_cards.paginate(page=page, per_page=per_page, error_out=False)
+
+    return render_template("library.html", cards=pagination.items, pagination=pagination, search="")
 
 @app.route("/deck")
 def all_decks():
@@ -126,16 +177,24 @@ def create_deck():
     if not user_id:
         flash("You need to be logged in to create a deck.")
         return redirect("/login")
-    name_req = request.form.get("name")
-    name = Deck.get_by_name(name_req)
 
-    new_deck = Deck.create(user_id, name)
+    name_req = request.form.get("name")
+    existing_deck = Deck.get_by_name(name_req)
+
+    if existing_deck:
+        flash("A deck with this name already exists.")
+        return redirect("/deck")
+
+    new_deck = Deck.create(user_id=user_id, name=name_req)
     db.session.add(new_deck)
     try:
         db.session.commit()
-    except:
-        print("error")
-    flash("Deck created successfully!")
+        flash("Deck created successfully!")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating deck: {e}")
+        flash("Error creating deck.")
+
     return redirect("/deck")
 
 @app.route("/library/<int:card_id>/add_card", methods=["POST"])

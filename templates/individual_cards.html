@@ -4,14 +4,14 @@
 
 {% block body %}
     <h1>{{ card.name_front }}</h1>
-    <p>Mana Cost: {{ card.mana_cost_front }}</p>
+    <p>Mana Cost: {{ card.mana_cost_front if card.mana_cost_front else 'N/A' }}</p>
     <p>CMC: {{ card.cmc_front }}</p>
     <p>Type: {{ card.type_line_front }}</p>
     <p>Oracle Text: {{ card.oracle_text_front }}</p>
     <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
     {% if card.name_back %}
         <h2>{{ card.name_back }}</h2>
-        <p>Mana Cost: {{ card.mana_cost_back }}</p>
+        <p>Mana Cost: {{ card.mana_cost_back if card.mana_cost_back else 'N/A' }}</p>
         <p>CMC: {{ card.cmc_back }}</p>
         <p>Type: {{ card.type_line_back }}</p>
         <p>Oracle Text: {{ card.oracle_text_back }}</p>
@@ -29,5 +29,4 @@
             <input type="submit" value="Add Card">
         </form>
     </div>
-    
 {% endblock %}

@@ -2,6 +2,11 @@
 
 <!-- Show the decks that contain the user id of the current session user -->
 {% block body %}
+
+    <h2>Your Decks</h2>
+    {% for deck in deck %}
+        <a href="/deck/{{ deck.deck_id }}">{{ deck.name }}</a><br>
+    {% endfor %}
 <div class="content">
     <h2>Create a Deck</h2>
     <form action="/create_deck" method="POST">
@@ -9,10 +14,5 @@
         <input type="text" id="name" name="name" required>
         <input type="submit" value="Create Deck">
     </form>
-
-    <h2>Your Decks</h2>
-    {% for deck in deck %}
-        <a href="/deck/{{ deck.deck_id }}">{{ deck.name }}</a><br>
-    {% endfor %}
 </div>
 {% endblock %}
