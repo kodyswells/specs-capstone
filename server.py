@@ -98,24 +98,48 @@ def search():
 @app.route("/filter", methods=["GET", "POST"])
 def filter_cards():
     if request.method == "POST":
+        search = request.form.get("search")
         selected_colors = request.form.getlist("color")
+        selected_types = request.form.getlist("card_type")
+    else:
+        search = request.args.get("search")
+        selected_colors = request.args.getlist("color")
+        selected_types = request.args.getlist("card_type")
 
-        filter_conditions = []
-        if selected_colors:
-            for color in selected_colors:
-                color_key = {
-                    "Green": "{G}",
-                    "Black": "{B}",
-                    "Blue": "{U}",
-                    "Red": "{R}",
-                    "White": "{W}",
-                    "Colorless": "{C}"
-                }.get(color, "")
-                if color_key:
-                    filter_conditions.append(Card.mana_cost_front.ilike(f"%{color_key}%"))
-    
+    filter_conditions = []
+
+    if search:
+        filter_conditions.append(Card.name_front.ilike(f"%{search}%"))
+
+    if selected_colors:
+        for color in selected_colors:
+            color_key = {
+                "Green": "{G}",
+                "Black": "{B}",
+                "Blue": "{U}",
+                "Red": "{R}",
+                "White": "{W}",
+                "Colorless": "{C}"
+            }.get(color, "")
+            if color_key:
+                filter_conditions.append(Card.mana_cost_front.ilike(f"%{color_key}%"))
+
+    if selected_types:
+        for card_type in selected_types:
+            type_key = {
+                "Creature": "Creature",
+                "Sorcery": "Sorcery",
+                "Instant": "Instant",
+                "Enchantment": "Enchantment",
+                "Artifact": "Artifact",
+                "Planeswalker": "Planeswalker",
+                "Battle — Siege": "Battle — Siege"
+            }.get(card_type, "")
+            if type_key:
+                filter_conditions.append(Card.type_line_front.ilike(f"%{type_key}%"))
+
     if filter_conditions:
-        filtered_cards = db.session.query(Card).filter(db.or_(*filter_conditions))
+        filtered_cards = db.session.query(Card).filter(db.and_(*filter_conditions))
     else:
         filtered_cards = db.session.query(Card)
 
@@ -123,7 +147,7 @@ def filter_cards():
     per_page = 50
     pagination = filtered_cards.paginate(page=page, per_page=per_page, error_out=False)
 
-    return render_template("library.html", cards=pagination.items, pagination=pagination, search="")
+    return render_template("library.html", cards=pagination.items, pagination=pagination, selected_colors=selected_colors, selected_types=selected_types, search=search)
 
 @app.route("/deck")
 def all_decks():

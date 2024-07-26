@@ -3,22 +3,33 @@
 {% block title %}Library{% endblock %}
 
 {% block body %}
-    <form action="/search" method="post">
+    <form action="/filter" method="post">
         <input type="search" name="search" id="search" value="{{ search }}"><button type="submit">Search</button>
     </form>
     <div>
-        <span>
-            <form action="/filter" method="post">
+        <form action="/filter" method="post">
+            <span>
                 <p>Filter By Color</p>
-                <label><input type="checkbox" name="color" value="Red"> Red</label>
-                <label><input type="checkbox" name="color" value="Blue"> Blue</label>
-                <label><input type="checkbox" name="color" value="Black"> Black</label>
-                <label><input type="checkbox" name="color" value="White"> White</label>
-                <label><input type="checkbox" name="color" value="Green"> Green</label>
-                <label><input type="checkbox" name="color" value="Colorless"> Colorless</label>
+                <label><input type="checkbox" name="color" value="Red" {% if 'Red' in selected_colors %}checked{% endif %}> Red</label>
+                <label><input type="checkbox" name="color" value="Blue" {% if 'Blue' in selected_colors %}checked{% endif %}> Blue</label>
+                <label><input type="checkbox" name="color" value="Black" {% if 'Black' in selected_colors %}checked{% endif %}> Black</label>
+                <label><input type="checkbox" name="color" value="White" {% if 'White' in selected_colors %}checked{% endif %}> White</label>
+                <label><input type="checkbox" name="color" value="Green" {% if 'Green' in selected_colors %}checked{% endif %}> Green</label>
+                <label><input type="checkbox" name="color" value="Colorless" {% if 'Colorless' in selected_colors %}checked{% endif %}> Colorless</label>
                 <button type="submit">Apply</button>
-            </form>
-        </span>
+            </span>
+            <span>
+                <p>Filter By Card Type</p>
+                <label><input type="checkbox" name="card_type" id="card_type" value="Creature" {% if 'Creature' in selected_types %}checked{% endif %}>Creature</label>
+                <label><input type="checkbox" name="card_type" id="card_type" value="Sorcery" {% if 'Sorcery' in selected_types %}checked{% endif %}>Sorcery</label>
+                <label><input type="checkbox" name="card_type" id="card_type" value="Instant" {% if 'Instant' in selected_types %}checked{% endif %}>Instant</label>
+                <label><input type="checkbox" name="card_type" id="card_type" value="Enchantment" {% if 'Enchantment' in selected_types %}checked{% endif %}>Enchantment</label>
+                <label><input type="checkbox" name="card_type" id="card_type" value="Artifact" {% if 'Artifact' in selected_types %}checked{% endif %}>Artifact</label>
+                <label><input type="checkbox" name="card_type" id="card_type" value="Planeswalker" {% if 'Planeswalker' in selected_types %}checked{% endif %}>Planeswalker</label>
+                <label><input type="checkbox" name="card_type" id="card_type" value="Battle — Siege" {% if 'Battle — Siege' in selected_types %}checked{% endif %}>Battle — Siege</label>
+                <button type="submit">Apply</button>
+            </span>
+        </form>
     </div>
     {% for card in cards %}
     <a href="/library/{{ card.card_id }}">
@@ -28,14 +39,14 @@
     {% endfor %}
     
     <div class="pagination">
-        <a href="{{ url_for('search', page=1, search=search) }}">First</a>
+        <a href="{{ url_for('filter_cards', page=1, search=search, color=selected_colors, card_type=selected_types) }}">First</a>
         {% if pagination.has_prev %}
-            <a href="{{ url_for('search', page=pagination.prev_num, search=search) }}">Previous</a>
+            <a href="{{ url_for('filter_cards', page=pagination.prev_num, search=search, color=selected_colors, card_type=selected_types) }}">Previous</a>
         {% endif %}
         <span>Page {{ pagination.page }} of {{ pagination.pages }}</span>
         {% if pagination.has_next %}
-            <a href="{{ url_for('search', page=pagination.next_num, search=search) }}">Next</a>
+            <a href="{{ url_for('filter_cards', page=pagination.next_num, search=search, color=selected_colors, card_type=selected_types) }}">Next</a>
         {% endif %}
-        <a href="{{ url_for('search', page=pagination.pages, search=search) }}">Last</a>
+        <a href="{{ url_for('filter_cards', page=pagination.pages, search=search, color=selected_colors, card_type=selected_types) }}">Last</a>
     </div>
 {% endblock %}
