@@ -31,21 +31,25 @@
             </span>
         </form>
     </div>
-    {% for card in cards %}
-    <a href="/library/{{ card.card_id }}">
-        <h1>{{ card.name_front }}</h1>
-        <img src="{{ card.img_uri_small_front }}" alt="{{ card.name_front }}">
-    </a>
-    {% endfor %}
+    <div id="libraryCardContainer">
+        {% for card in cards %}
+        <span id="libraryCard">
+            <a href="/library/{{ card.card_id }}">
+                <h1>{{ card.name_front }}</h1>
+                <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
+            </a>
+        </span>
+        {% endfor %}
+    </div>
     
     <div class="pagination">
         <a href="{{ url_for('filter_cards', page=1, search=search, color=selected_colors, card_type=selected_types) }}">First</a>
         {% if pagination.has_prev %}
-            <a href="{{ url_for('filter_cards', page=pagination.prev_num, search=search, color=selected_colors, card_type=selected_types) }}">Previous</a>
+            <a href="{{ url_for('filter_cards', page=pagination.prev_num, search=search, color=selected_colors, card_type=selected_types) }}"><</a>
         {% endif %}
         <span>Page {{ pagination.page }} of {{ pagination.pages }}</span>
         {% if pagination.has_next %}
-            <a href="{{ url_for('filter_cards', page=pagination.next_num, search=search, color=selected_colors, card_type=selected_types) }}">Next</a>
+            <a href="{{ url_for('filter_cards', page=pagination.next_num, search=search, color=selected_colors, card_type=selected_types) }}">></a>
         {% endif %}
         <a href="{{ url_for('filter_cards', page=pagination.pages, search=search, color=selected_colors, card_type=selected_types) }}">Last</a>
     </div>

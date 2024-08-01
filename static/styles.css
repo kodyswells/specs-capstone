@@ -1,0 +1,160 @@
+body {
+    font-family: 'Arial, sans-serif';
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+}
+
+nav li {
+    margin: 0 1rem;
+}
+
+nav button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+nav button:hover {
+    background-color: #333;
+}
+
+.flash-msg {
+    color: red;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.deck-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.deck-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.deck-details {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.hover-card {
+    position: fixed;
+    top: 25%; /* Adjust this value based on your header height */
+    left: 30px; /* Add some padding from the left */
+    width: 300px;
+    z-index: 10;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none; /* Hide by default */
+}
+
+.hover-card img {
+    width: 100%;
+}
+
+.card-list {
+    margin-left: 250px; /* Make space for the hover card */
+}
+
+.card-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.card-list li {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.card-list li:hover {
+    background-color: #e0e0e0;
+}
+
+.card-type-section {
+    margin-bottom: 2rem;
+}
+
+.card-type-section h2 {
+    text-align: left;
+}
+
+.remove-card-form {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.remove-card-form label,
+.remove-card-form input {
+    display: block;
+    margin: 0.5rem auto;
+}
+
+#libraryCardContainer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Creates 5 columns each taking up equal space */
+    grid-gap: 20px; /* Space between the cards */
+    padding: 20px; /* Padding around the grid */
+}
+
+#libraryCardContainer img {
+    width: 100%; /* Ensures images take up all available width of the card */
+    height: auto; /* Keeps the image aspect ratio intact */
+}
+
+#libraryCard {
+    display: block;
+    text-align: center; /* Centers the text inside the card */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: adds a subtle shadow to each card */
+    transition: transform 0.2s; /* Optional: smooth transition for hover effects */
+}
+
+#libraryCard:hover {
+    transform: scale(1.05); /* Optional: slightly enlarges the card on hover */
+}
+
+#libraryCard a {
+    text-decoration: none;
+    color: black;
+}
+
+
+.pagination {
+    text-align: center; /* Center-aligns the pagination links */
+    margin-top: 20px; /* Space between cards and pagination */
+}
+
+.pagination a {
+    margin: 0 10px; /* Space between pagination links */
+    text-decoration: none; /* Removes underline from links */
+    color: #007bff; /* Bootstrap link color for consistency, or choose your own */
+}
+
+.pagination a:hover {
+    text-decoration: underline; /* Underlines links on hover for better interaction */
+}

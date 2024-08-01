@@ -3,27 +3,37 @@
 {% block title %}{{ deck.name }}{% endblock %}
 
 {% block body %}
-
-<div>
+<div class="deck-container">
     <h1>{{ deck.name }}</h1>
-
-    <div>
-        {% for card in cards %}
-        <a href="/library/{{ card.card_id }}">
-            <h1>{{card.name_front}}</h1>
-            <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
-        </a>
-        {% endfor %}
+    <div class="deck-details">
+        <div class="hover-card">
+            <img id="hovered-card-img" src="" alt="Hovered Card">
+        </div>
+        <div class="card-list">
+            {% for card_type, cards_of_type in cards_by_type.items() %}
+            <div class="card-type-section">
+                <h2>{{ card_type }} ({{ cards_of_type|length }})</h2>
+                <ul>
+                    {% for card in cards_of_type %}
+                    <li class="card" data-img="{{ card.img_uri_normal_front }}">
+                        <a href="/library/{{ card.card_id }}">
+                            {{ card.name_front }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <form action="/deck/remove_card" method="post" class="remove-card-form">
+        <input type="hidden" name="deck_id" value="{{ deck.deck_id }}">
+        <label for="name">Enter the name of the card you want to remove:</label>
+        <input type="text" name="name" id="name">
+        <label for="quantity">Enter the number of cards to remove:</label>
+        <input type="number" name="quantity" id="quantity" min="1" value="1">
+        <input type="submit" value="Remove">
+    </form>
 </div>
-
-<form action="/deck/remove_card" method="post">
-    <input type="hidden" name="deck_id" value="{{ deck.deck_id }}">
-    <label for="name">Enter the name of the card you want to remove</label>
-    <input type="text" name="name" id="name">
-    <label for="quantity">Enter the number of cards to remove</label>
-    <input type="number" name="quantity" id="quantity" min="1" value="1">
-    <input type="submit" value="Remove">
-</form>
-
 {% endblock %}

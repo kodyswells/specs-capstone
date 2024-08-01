@@ -1,5 +1,6 @@
 from flask import Flask, render_template, flash, redirect, session, request
 from model import connect_to_db, User, Card, Deck, CardDeck, Library, db
+from collections import defaultdict
 
 app = Flask(__name__)
 app.secret_key = "DevTest"
@@ -29,7 +30,11 @@ def register_user():
         db.session.commit()
         flash("Account created! Please log in.")
 
-    return redirect("/")
+    return render_template("login.html")
+
+@app.route("/login")
+def login_page():
+    return render_template("login.html")
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -44,7 +49,7 @@ def login():
         return redirect("/")
     else:
         flash("Invalid login information")
-        return redirect("/")
+        return render_template("login.html")
     
 @app.route("/logout", methods=["POST"])
 def logout():
@@ -167,12 +172,33 @@ def show_cards_in_deck(deck_id):
     
     card_decks = CardDeck.get_by_deck_id(deck_id)
     cards = [cd.card for cd in card_decks]
-    
-    return render_template("individual_deck.html", deck=deck, cards=cards)
+
+    # Group cards by type
+    cards_by_type = defaultdict(list)
+    for card in cards:
+        card_type = card.type_line_front
+        if "Creature" in card_type:
+            cards_by_type["Creature"].append(card)
+        elif "Sorcery" in card_type:
+            cards_by_type["Sorcery"].append(card)
+        elif "Instant" in card_type:
+            cards_by_type["Instant"].append(card)
+        elif "Enchantment" in card_type:
+            cards_by_type["Enchantment"].append(card)
+        elif "Artifact" in card_type:
+            cards_by_type["Artifact"].append(card)
+        elif "Planeswalker" in card_type:
+            cards_by_type["Planeswalker"].append(card)
+        elif "Battle" in card_type:
+            cards_by_type["Battle — Siege"].append(card)
+        elif "Land" in card_type:
+            cards_by_type["Land"].append(card)
+
+    return render_template("individual_deck.html", deck=deck, cards_by_type=cards_by_type)
 
 @app.route("/deck/remove_card", methods=["POST"])
 def remove_card():
-    name_req = request.form.get("name").strip()  # Strip any leading/trailing whitespace
+    name_req = request.form.get("name").strip()
     deck_id = request.form.get("deck_id")
     quantity = int(request.form.get("quantity"))
    

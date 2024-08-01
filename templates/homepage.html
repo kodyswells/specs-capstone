@@ -7,34 +7,5 @@
     <header>
         <h1>Welcome to the Magic the Gathering library and deck builder!</h1>
     </header>
-    
-        <div class="content">
-            <h2>Create an Account</h2>
-            <form action="/users" method="POST">
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email" required>
-    
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-    
-                <input type="submit" value="Create Account">
-            </form>
-    
-            <h2>Log In</h2>
-            <form action="/login" method="POST">
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email" required>
-    
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-    
-                <input type="submit" value="Log In">
-            </form>
-            
-            <h2>Log Out</h2>
-            <form action="/logout" method="POST">
-                <button type="submit">Logout</button>
-            </form>
-        </div>
 </div>
 {% endblock %}

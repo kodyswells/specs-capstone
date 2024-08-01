@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+    <link rel="stylesheet" href="../static/reset.css">
+    <link rel="stylesheet" href="../static/styles.css">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
 
     {% block head %}
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/users">Users</a></li>
-                <li><a href="/library">Library</a></li>
-                <li><a href="/deck">Deck</a></li>
-            </ul>
-        </nav>
+    <nav>
+        <ul>
+            <li><button onclick="location.href='/'">Home</button></li>
+            <li><button onclick="location.href='/login'">Login</button></li>
+            <li><button onclick="location.href='/library'">Library</button></li>
+            <li><button onclick="location.href='/deck'">Deck</button></li>
+        </ul>
+    </nav>
     {% endblock %}
 </head>
 <body>
     {% for msg in get_flashed_messages() %}
-    <p class="flash-msg">
-      {{ msg }}
-    </p>
+    <p class="flash-msg">{{ msg }}</p>
     {% endfor %}
     {% block body %}{% endblock %}
+    <script src="../static/scripts.js"></script>
 </body>
 </html>
