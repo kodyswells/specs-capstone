@@ -3,43 +3,49 @@
 {% block title %}Library{% endblock %}
 
 {% block body %}
-    <form action="/filter" method="post">
-        <input type="search" name="search" id="search" value="{{ search }}"><button type="submit">Search</button>
+    <form action="/filter" method="post" class="search-form">
+        <input type="search" name="search" id="search" value="{{ search }}" placeholder="Search for cards">
+        <button type="submit" class="search-button">Search</button>
     </form>
-    <div>
-        <form action="/filter" method="post">
-            <span>
-                <p>Filter By Color</p>
-                <label><input type="checkbox" name="color" value="Red" {% if 'Red' in selected_colors %}checked{% endif %}> Red</label>
-                <label><input type="checkbox" name="color" value="Blue" {% if 'Blue' in selected_colors %}checked{% endif %}> Blue</label>
-                <label><input type="checkbox" name="color" value="Black" {% if 'Black' in selected_colors %}checked{% endif %}> Black</label>
-                <label><input type="checkbox" name="color" value="White" {% if 'White' in selected_colors %}checked{% endif %}> White</label>
-                <label><input type="checkbox" name="color" value="Green" {% if 'Green' in selected_colors %}checked{% endif %}> Green</label>
-                <label><input type="checkbox" name="color" value="Colorless" {% if 'Colorless' in selected_colors %}checked{% endif %}> Colorless</label>
-                <button type="submit">Apply</button>
+    <div class="main-content">
+        <div class="filter-container">
+            <form action="/filter" method="post" class="filter-form">
+                <div class="filter-group">
+                    <button type="button" class="filter-toggle" onclick="toggleFilter('color-filter')">Filter By Color</button>
+                    <div id="color-filter" class="filter-options">
+                        <label><input type="checkbox" name="color" value="Red" {% if 'Red' in selected_colors %}checked{% endif %}> Red</label>
+                        <label><input type="checkbox" name="color" value="Blue" {% if 'Blue' in selected_colors %}checked{% endif %}> Blue</label>
+                        <label><input type="checkbox" name="color" value="Black" {% if 'Black' in selected_colors %}checked{% endif %}> Black</label>
+                        <label><input type="checkbox" name="color" value="White" {% if 'White' in selected_colors %}checked{% endif %}> White</label>
+                        <label><input type="checkbox" name="color" value="Green" {% if 'Green' in selected_colors %}checked{% endif %}> Green</label>
+                        <label><input type="checkbox" name="color" value="Colorless" {% if 'Colorless' in selected_colors %}checked{% endif %}> Colorless</label>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <button type="button" class="filter-toggle" onclick="toggleFilter('type-filter')">Filter By Card Type</button>
+                    <div id="type-filter" class="filter-options">
+                        <label><input type="checkbox" name="card_type" id="card_type" value="Creature" {% if 'Creature' in selected_types %}checked{% endif %}>Creature</label>
+                        <label><input type="checkbox" name="card_type" id="card_type" value="Sorcery" {% if 'Sorcery' in selected_types %}checked{% endif %}>Sorcery</label>
+                        <label><input type="checkbox" name="card_type" id="card_type" value="Instant" {% if 'Instant' in selected_types %}checked{% endif %}>Instant</label>
+                        <label><input type="checkbox" name="card_type" id="card_type" value="Enchantment" {% if 'Enchantment' in selected_types %}checked{% endif %}>Enchantment</label>
+                        <label><input type="checkbox" name="card_type" id="card_type" value="Artifact" {% if 'Artifact' in selected_types %}checked{% endif %}>Artifact</label>
+                        <label><input type="checkbox" name="card_type" id="card_type" value="Planeswalker" {% if 'Planeswalker' in selected_types %}checked{% endif %}>Planeswalker</label>
+                        <label><input type="checkbox" name="card_type" id="card_type" value="Battle — Siege" {% if 'Battle — Siege' in selected_types %}checked{% endif %}>Battle — Siege</label>
+                    </div>
+                </div>
+                <button type="submit" class="apply-button">Apply</button>
+            </form>
+        </div>
+        <div id="libraryCardContainer">
+            {% for card in cards %}
+            <span id="libraryCard">
+                <a href="/library/{{ card.card_id }}">
+                    <h1>{{ card.name_front }}</h1>
+                    <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
+                </a>
             </span>
-            <span>
-                <p>Filter By Card Type</p>
-                <label><input type="checkbox" name="card_type" id="card_type" value="Creature" {% if 'Creature' in selected_types %}checked{% endif %}>Creature</label>
-                <label><input type="checkbox" name="card_type" id="card_type" value="Sorcery" {% if 'Sorcery' in selected_types %}checked{% endif %}>Sorcery</label>
-                <label><input type="checkbox" name="card_type" id="card_type" value="Instant" {% if 'Instant' in selected_types %}checked{% endif %}>Instant</label>
-                <label><input type="checkbox" name="card_type" id="card_type" value="Enchantment" {% if 'Enchantment' in selected_types %}checked{% endif %}>Enchantment</label>
-                <label><input type="checkbox" name="card_type" id="card_type" value="Artifact" {% if 'Artifact' in selected_types %}checked{% endif %}>Artifact</label>
-                <label><input type="checkbox" name="card_type" id="card_type" value="Planeswalker" {% if 'Planeswalker' in selected_types %}checked{% endif %}>Planeswalker</label>
-                <label><input type="checkbox" name="card_type" id="card_type" value="Battle — Siege" {% if 'Battle — Siege' in selected_types %}checked{% endif %}>Battle — Siege</label>
-                <button type="submit">Apply</button>
-            </span>
-        </form>
-    </div>
-    <div id="libraryCardContainer">
-        {% for card in cards %}
-        <span id="libraryCard">
-            <a href="/library/{{ card.card_id }}">
-                <h1>{{ card.name_front }}</h1>
-                <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
-            </a>
-        </span>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
     
     <div class="pagination">
@@ -53,4 +59,5 @@
         {% endif %}
         <a href="{{ url_for('filter_cards', page=pagination.pages, search=search, color=selected_colors, card_type=selected_types) }}">Last</a>
     </div>
+<script src="../static/library.js"></script>
 {% endblock %}

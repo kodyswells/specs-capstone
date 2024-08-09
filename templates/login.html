@@ -1,37 +1,70 @@
 {% extends 'base.html' %}
 
-{% block title %} <h1>Login</h1> {% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block body %}
+{% if user %}
 
+<div>
+    <div id="login-content" class="login-content" style="display: block;">
+        <h2>You are currently signed in</h2>
+        <div class="logout-form">
+            <form action="/logout" method="POST">
+                <button type="submit">Log Out</button>
+            </form>
+        </div>
+    </div>
 
-<div class="content">
-    <h2>Create an Account</h2>
-    <form action="/users" method="POST">
-        <label for="email">Email:</label>
-        <input type="text" id="email" name="email" required>
+{% else %}
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <input type="submit" value="Create Account">
-    </form>
-
-    <h2>Log In</h2>
-    <form action="/login" method="POST">
-        <label for="email">Email:</label>
-        <input type="text" id="email" name="email" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <input type="submit" value="Log In">
-    </form>
+<div>
+    <div id="login-content" class="login-content" style="display: block;">
+        <h2>Sign In</h2>
+        <form action="/login" method="POST">
+            <div class="email">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            
+            <div class="password">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
     
-    <h2>Log Out</h2>
-    <form action="/logout" method="POST">
-        <button type="submit">Logout</button>
-    </form>
-</div>
+            <input type="submit" value="Sign In">
+        </form>
+        <div class="logout-form">
+            <form action="/logout" method="POST">
+                <button type="submit">Log Out</button>
+            </form>
+        </div>
+        <p>Don't have an account? <a href="#" onclick="toggleForm('create')">Create an account</a></p>
+    </div>
 
+    <div id="create-content" class="login-content" style="display: none;">
+        <h2>Create an Account</h2>
+        <form action="/users" method="POST">
+            <div class="email">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+    
+            <div class="password">               
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+    
+            <input type="submit" value="Create Account">
+        </form>
+        <div class="logout-form">
+            <form action="/logout" method="POST">
+                <button type="submit">Log Out</button>
+            </form>
+        </div>
+        <p>Already have an account? <a href="#" onclick="toggleForm('login')">Sign in</a></p>
+    </div>
+
+</div>
+{% endif %}
+<script src="../static/login.js"></script>
 {% endblock %}

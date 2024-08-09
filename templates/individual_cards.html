@@ -3,30 +3,37 @@
 {% block title %}{{ card.name_front }}{% endblock %}
 
 {% block body %}
-    <h1>{{ card.name_front }}</h1>
-    <p>Mana Cost: {{ card.mana_cost_front if card.mana_cost_front else 'N/A' }}</p>
-    <p>CMC: {{ card.cmc_front }}</p>
-    <p>Type: {{ card.type_line_front }}</p>
-    <p>Oracle Text: {{ card.oracle_text_front }}</p>
-    <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
+<div class="card-details-container">
+    <div class="card-front">
+        <h1>{{ card.name_front }}</h1>
+        <p>Mana Cost: {{ card.mana_cost_front if card.mana_cost_front else 'N/A' }}</p>
+        <p>CMC: {{ card.cmc_front }}</p>
+        <p>Type: {{ card.type_line_front }}</p>
+        <p>Oracle Text: {{ card.oracle_text_front }}</p>
+        <img src="{{ card.img_uri_normal_front }}" alt="{{ card.name_front }}">
+    </div>
     {% if card.name_back %}
+    <div class="card-back">
         <h2>{{ card.name_back }}</h2>
         <p>Mana Cost: {{ card.mana_cost_back if card.mana_cost_back else 'N/A' }}</p>
         <p>CMC: {{ card.cmc_back }}</p>
         <p>Type: {{ card.type_line_back }}</p>
         <p>Oracle Text: {{ card.oracle_text_back }}</p>
         <img src="{{ card.img_uri_normal_back }}" alt="{{ card.name_back }}">
-    {% endif %}
-    <div class="content">
-        <h2>Add card to deck below</h2>
-        <form action="/library/{{ card.card_id }}/add_card" method="post">
-            <label for="deck">Select the deck you want to add the card to:</label>
-            <select name="deck_id" id="deck">
-                {% for deck in decks %}
-                    <option value="{{ deck.deck_id }}">{{ deck.name }}</option>
-                {% endfor %}
-            </select>
-            <input type="submit" value="Add Card">
-        </form>
     </div>
+    {% endif %}
+</div>
+
+<div class="content">
+    <h2>Add card to deck below</h2>
+    <form action="/library/{{ card.card_id }}/add_card" method="post" class="deck-form">
+        <label for="deck">Select the deck you want to add the card to:</label>
+        <select name="deck_id" id="deck">
+            {% for deck in decks %}
+            <option value="{{ deck.deck_id }}">{{ deck.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Add Card">
+    </form>
+</div>
 {% endblock %}

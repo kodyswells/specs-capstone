@@ -34,7 +34,8 @@ def register_user():
 
 @app.route("/login")
 def login_page():
-    return render_template("login.html")
+    user = session.get("user_id")
+    return render_template("login.html", user=user)
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -49,14 +50,14 @@ def login():
         return redirect("/")
     else:
         flash("Invalid login information")
-        return render_template("login.html")
+    return redirect("/login")
     
 @app.route("/logout", methods=["POST"])
 def logout():
     """Logging out a user"""
     session.clear()
     flash("Logged out succesfully")
-    return redirect("/")
+    return redirect("/login")
 
 @app.route("/library/<int:card_id>")
 def show_card(card_id):
@@ -245,6 +246,24 @@ def create_deck():
         print(f"Error creating deck: {e}")
         flash("Error creating deck.")
 
+    return redirect("/deck")
+
+@app.route("/delete_deck", methods=["POST"])
+def delete_deck():
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("You need to be logged in to delete a deck.")
+        return redirect("/login")
+    
+    name_req = request.form.get("name")
+    existing_deck = Deck.get_by_name(name_req)
+
+    if not existing_deck:
+        flash("No deck exists with that name.")
+
+    db.session.delete(existing_deck)
+    flash(f"Deck {existing_deck.name} deleted sucesfully!")
+    db.session.commit()
     return redirect("/deck")
 
 @app.route("/library/<int:card_id>/add_card", methods=["POST"])

@@ -36,15 +36,17 @@ nav button {
 }
 
 nav button:hover {
-    background-color: #333;
+    background-color: #444;
 }
 
 .flash-msg {
     color: red;
     text-align: center;
     margin: 1rem 0;
+    background-color: #333;
 }
 
+/* Deck Container Styles */
 .deck-container {
     padding: 2rem;
     max-width: 1200px;
@@ -64,14 +66,14 @@ nav button:hover {
 
 .hover-card {
     position: fixed;
-    top: 25%; /* Adjust this value based on your header height */
-    left: 30px; /* Add some padding from the left */
+    top: 25%;
+    left: 30px;
     width: 300px;
     z-index: 10;
     background-color: white;
     border: 1px solid #ddd;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: none; /* Hide by default */
+    display: none;
 }
 
 .hover-card img {
@@ -79,7 +81,7 @@ nav button:hover {
 }
 
 .card-list {
-    margin-left: 250px; /* Make space for the hover card */
+    margin-left: 250px;
 }
 
 .card-list ul {
@@ -115,27 +117,32 @@ nav button:hover {
     margin: 0.5rem auto;
 }
 
+/* Library Card Styles */
 #libraryCardContainer {
+    margin-left: 240px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Creates 5 columns each taking up equal space */
-    grid-gap: 20px; /* Space between the cards */
-    padding: 20px; /* Padding around the grid */
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 20px;
+    padding: 20px;
 }
 
 #libraryCardContainer img {
-    width: 100%; /* Ensures images take up all available width of the card */
-    height: auto; /* Keeps the image aspect ratio intact */
+    width: 100%;
+    height: auto;
 }
 
 #libraryCard {
     display: block;
-    text-align: center; /* Centers the text inside the card */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: adds a subtle shadow to each card */
-    transition: transform 0.2s; /* Optional: smooth transition for hover effects */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 #libraryCard:hover {
-    transform: scale(1.05); /* Optional: slightly enlarges the card on hover */
+    transform: scale(1.05);
 }
 
 #libraryCard a {
@@ -143,18 +150,334 @@ nav button:hover {
     color: black;
 }
 
-
+/* Pagination Styles */
 .pagination {
-    text-align: center; /* Center-aligns the pagination links */
-    margin-top: 20px; /* Space between cards and pagination */
+    text-align: center;
+    margin-top: 20px;
 }
 
 .pagination a {
-    margin: 0 10px; /* Space between pagination links */
-    text-decoration: none; /* Removes underline from links */
-    color: #007bff; /* Bootstrap link color for consistency, or choose your own */
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007bff;
 }
 
 .pagination a:hover {
-    text-decoration: underline; /* Underlines links on hover for better interaction */
+    text-decoration: underline;
+}
+
+/* Filter Styles */
+.filter-options {
+    display: none;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.search-form input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    font-size: 16px;
+}
+
+.search-button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #007bff;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+.main-content {
+    display: flex;
+}
+
+.filter-container {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    width: 200px;
+    padding: 15px;
+}
+
+.filter-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-toggle {
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    text-align: left;
+}
+
+.filter-toggle:hover {
+    background-color: #444;
+}
+
+.filter-options {
+    display: none;
+    margin-top: 10px;
+}
+
+.filter-options label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.apply-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+.apply-button:hover {
+    background-color: #218838;
+}
+
+/* Login Form Styles */
+.login-content {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-content h2 {
+    margin-bottom: 1.5rem;
+    font-size: 24px;
+}
+
+.login-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-content .email,
+.login-content .password {
+    margin-bottom: 1rem;
+}
+
+.login-content label {
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+}
+
+.login-content input[type="text"],
+.login-content input[type="password"] {
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login-content input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-content input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.login-content p {
+    margin-top: 1rem;
+    font-size: 14px;
+}
+
+.login-content a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-content a:hover {
+    text-decoration: underline;
+}
+
+/* Logout Button Styles */
+.logout-form {
+    text-align: center;
+}
+
+.logout-form button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 2rem;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.logout-form button:hover {
+    background-color: #c82333;
+}
+
+.card-details-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 2rem;
+    gap: 2rem;
+}
+
+.card-front, .card-back {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    max-width: 400px;
+    text-align: center;
+}
+
+.card-front img, .card-back img {
+    width: 75%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.card-front h1, .card-back h2 {
+    font-size: 32px;
+}
+
+.content {
+    max-width: 400px;
+    margin: 2rem auto;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+}
+
+.deck-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.deck-form label, .deck-form select, .deck-form input[type="submit"] {
+    font-size: 1rem;
+}
+
+.deck-form input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.deck-form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.deck-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.deck-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: black;
+    border-style: ridge;
+}
+
+.deck-header h1 {
+    font-size: 32px;
+}
+
+.deck-actions{
+    display: flex;
+}
+
+.deck-actions a {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+.deck-actions a:hover {
+    background-color: #0056b3;
+}
+
+.deck-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.deck-item {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    width: 100%;
+    max-width: 300px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.deck-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.deck-item h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
 }
