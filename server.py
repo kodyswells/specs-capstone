@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, session, request
 from model import connect_to_db, User, Card, Deck, CardDeck, Library, db
 from collections import defaultdict
+from sqlalchemy import func
 
 app = Flask(__name__)
 app.secret_key = "DevTest"
@@ -24,6 +25,8 @@ def register_user():
     user = User.get_by_email(email)
     if user:
         flash("User already exists. Please log in.")
+    elif "@" not in email:
+        flash("Please enter a valid email address.")
     else:
         new_user = User.create(email, password)
         db.session.add(new_user)
@@ -78,7 +81,7 @@ def show_card(card_id):
 def show_library():
     page = request.args.get('page', 1, type=int)
     per_page = 100
-    pagination = Card.query.paginate(page=page, per_page=per_page, error_out=False)
+    pagination = Card.query.order_by(Card.card_id.asc()).paginate(page=page, per_page=per_page, error_out=False)
     cards = pagination.items
     return render_template("library.html", cards=cards, pagination=pagination)
 
@@ -93,9 +96,9 @@ def search():
 
     per_page = 50
     if search:
-        search_cards = db.session.query(Card).filter(Card.name_front.ilike(f'%{search}%'))
+        search_cards = db.session.query(Card).filter(Card.name_front.ilike(f'%{search}%')).order_by(Card.card_id.asc())
     else:
-        search_cards = db.session.query(Card)
+        search_cards = db.session.query(Card).order_by(Card.card_id.asc())
 
     pagination = search_cards.paginate(page=page, per_page=per_page, error_out=False)
     cards = pagination.items
@@ -139,15 +142,16 @@ def filter_cards():
                 "Enchantment": "Enchantment",
                 "Artifact": "Artifact",
                 "Planeswalker": "Planeswalker",
-                "Battle — Siege": "Battle — Siege"
+                "Battle — Siege": "Battle — Siege",
+                "Land": "Land"
             }.get(card_type, "")
             if type_key:
                 filter_conditions.append(Card.type_line_front.ilike(f"%{type_key}%"))
 
     if filter_conditions:
-        filtered_cards = db.session.query(Card).filter(db.and_(*filter_conditions))
+        filtered_cards = db.session.query(Card).filter(db.and_(*filter_conditions)).order_by(Card.card_id.asc())
     else:
-        filtered_cards = db.session.query(Card)
+        filtered_cards = db.session.query(Card).order_by(Card.card_id.asc())
 
     page = request.args.get('page', 1, type=int)
     per_page = 50
@@ -164,6 +168,7 @@ def all_decks():
     all_decks = Deck.show_decks(user_id)
     return render_template("decks.html", deck = all_decks)
 
+
 @app.route("/deck/<int:deck_id>")
 def show_cards_in_deck(deck_id):
     deck = db.session.get(Deck, deck_id)
@@ -171,13 +176,21 @@ def show_cards_in_deck(deck_id):
         flash("Deck not found")
         return redirect("/deck")
     
-    card_decks = CardDeck.get_by_deck_id(deck_id)
-    cards = [cd.card for cd in card_decks]
+    # Query to get all cards in the deck and count occurrences
+    card_decks = db.session.query(
+        CardDeck.card_id, func.count(CardDeck.card_id).label('count')
+    ).filter(CardDeck.deck_id == deck_id).group_by(CardDeck.card_id).all()
 
-    # Group cards by type
+    cards = []
+    total_cards = 0
     cards_by_type = defaultdict(list)
-    for card in cards:
+
+    for card_id, count in card_decks:
+        card = db.session.get(Card, card_id)
+        total_cards += count
         card_type = card.type_line_front
+
+        # Add card to the appropriate type list
         if "Creature" in card_type:
             cards_by_type["Creature"].append(card)
         elif "Sorcery" in card_type:
@@ -195,7 +208,10 @@ def show_cards_in_deck(deck_id):
         elif "Land" in card_type:
             cards_by_type["Land"].append(card)
 
-    return render_template("individual_deck.html", deck=deck, cards_by_type=cards_by_type)
+        # Add the card to the list with the count (optional, if you want to display counts)
+        cards.append((card, count))
+
+    return render_template("individual_deck.html", deck=deck, cards_by_type=cards_by_type, total_cards=total_cards)
 
 @app.route("/deck/remove_card", methods=["POST"])
 def remove_card():

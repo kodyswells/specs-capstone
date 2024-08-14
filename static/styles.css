@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial, sans-serif';
-    background-color: #f5f5f5;
+    background-color: rgb(45, 45, 45);
     margin: 0;
     padding: 0;
 }
@@ -54,6 +54,8 @@ nav button:hover {
 }
 
 .deck-container h1 {
+    font-size: xx-large;
+    color: white;
     text-align: center;
     margin-bottom: 2rem;
 }
@@ -68,7 +70,7 @@ nav button:hover {
     position: fixed;
     top: 25%;
     left: 30px;
-    width: 300px;
+    width: 225px;
     z-index: 10;
     background-color: white;
     border: 1px solid #ddd;
@@ -81,6 +83,7 @@ nav button:hover {
 }
 
 .card-list {
+    display: flex;
     margin-left: 250px;
 }
 
@@ -95,18 +98,26 @@ nav button:hover {
 }
 
 .card-list li:hover {
-    background-color: #e0e0e0;
+    background-color: rgba(128, 128, 128, 0.326);
 }
 
 .card-type-section {
+    width: 150px;
     margin-bottom: 2rem;
 }
 
 .card-type-section h2 {
+    color: white;
     text-align: left;
 }
 
+.card-type-section a {
+    text-decoration: none;
+    color: white;
+}
+
 .remove-card-form {
+    color: white;
     margin-top: 2rem;
     text-align: center;
 }
@@ -115,6 +126,17 @@ nav button:hover {
 .remove-card-form input {
     display: block;
     margin: 0.5rem auto;
+}
+
+.remove-card-form button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 2rem;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 /* Library Card Styles */
@@ -152,6 +174,7 @@ nav button:hover {
 
 /* Pagination Styles */
 .pagination {
+    color: white;
     text-align: center;
     margin-top: 20px;
 }
@@ -168,6 +191,7 @@ nav button:hover {
 
 /* Filter Styles */
 .filter-options {
+    color: white;
     display: none;
 }
 
@@ -418,26 +442,22 @@ nav button:hover {
     background-color: #0056b3;
 }
 
-.deck-container {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
 .deck-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    border-bottom: black;
+    border-bottom: white;
     border-style: ridge;
 }
 
 .deck-header h1 {
+    color: white;
     font-size: 32px;
 }
 
 .deck-actions{
+    color: white;
     display: flex;
 }
 
@@ -480,4 +500,8 @@ nav button:hover {
     margin: 0;
     font-size: 1.2rem;
     color: #333;
+}
+
+.homepage-img img {
+    width: 100vw;
 }

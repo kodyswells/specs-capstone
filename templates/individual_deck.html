@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="deck-container">
-    <h1>{{ deck.name }}</h1>
+    <h1>{{ deck.name }} ({{ total_cards }} cards)</h1>
     <div class="deck-details">
         <div class="hover-card">
             <img id="hovered-card-img" src="" alt="Hovered Card">
@@ -33,7 +33,7 @@
         <input type="text" name="name" id="name">
         <label for="quantity">Enter the number of cards to remove:</label>
         <input type="number" name="quantity" id="quantity" min="1" value="1">
-        <input type="submit" value="Remove">
+        <button type="submit" value="Remove">Remove</button>
     </form>
 </div>
 <script src="../static/individualDeck.js"></script>
